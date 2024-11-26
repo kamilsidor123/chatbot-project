@@ -41,12 +41,57 @@ st.markdown("""
         .stChatMessage div, .stChatMessage p, .stChatMessage span { color: """ + COLORS['black'] + """ !important; }
         .stChatMessage[data-testid="user-message"] { background-color: """ + COLORS['dark_blue'] + """ !important; }
         .stChatMessage[data-testid="assistant-message"] { background-color: white !important; border: 2px solid """ + COLORS['yellow'] + """; }
-        .stChatInputContainer { position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background-color: """ + COLORS['dark_blue'] + """ !important; padding: 20px 60px !important; z-index: 999 !important; }
-        textarea { background-color: """ + COLORS['dark_blue'] + """ !important; border: 1px solid """ + COLORS['blue'] + """ !important; color: white !important; }
-        textarea::placeholder { color: white !important; opacity: 0.7; }
-        .block-container { padding-bottom: 400px !important; }
-        .custom-header { background-color: """ + COLORS['dark_blue'] + """ !important; padding: 20px; margin: -100px -100px 20px -100px; }
-        .stChatFlow { margin-bottom: 150px !important; }
+        
+        /* Chat input container styling */
+        .stChatInputContainer, 
+        .stChatInputContainer section, 
+        .stChatInputContainer div {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            padding: 20px 60px !important;
+            z-index: 999 !important;
+            border: none !important;
+        }
+        
+        /* Force dark theme for input area */
+        textarea, 
+        .stTextInput input, 
+        .stTextInput textarea {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            border: 1px solid """ + COLORS['blue'] + """ !important;
+            color: white !important;
+            caret-color: white !important;
+        }
+        
+        /* Ensure placeholder text is visible */
+        textarea::placeholder { 
+            color: rgba(255, 255, 255, 0.7) !important; 
+        }
+        
+        /* Additional spacing for content */
+        .block-container { 
+            padding-bottom: 400px !important; 
+        }
+        
+        /* Header styling */
+        .custom-header { 
+            background-color: """ + COLORS['dark_blue'] + """ !important; 
+            padding: 20px; 
+            margin: -100px -100px 20px -100px; 
+        }
+        
+        /* Chat flow spacing */
+        .stChatFlow { 
+            margin-bottom: 150px !important; 
+        }
+        
+        /* Force dark theme for bottom bar */
+        [data-testid="stChatInput"] > div {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
