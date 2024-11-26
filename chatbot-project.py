@@ -20,7 +20,7 @@ if 'client' not in st.session_state:
         )
         print("OpenAI client initialized successfully")
         
-        # Enhanced debugging: List available models and check if our model is available
+        # Debug: List available models and check if our model is available
         try:
             models = st.session_state.client.models.list()
             available_models = [model.id for model in models]
@@ -276,30 +276,33 @@ if user_input := st.chat_input("Wpisz swoje pytanie tutaj..."):
             print(f"Attempting to use fine-tuned model: {fine_tuned_model}")
             print(f"User input: {user_input}")
             
-            # Prepare messages with system prompt
+            # Prepare messages with system prompt matching the fine-tuned format
             messages = [
                 {
                     "role": "system",
-                    "content": "Jesteś asystentem Legitize - firmy oferującej nowoczesne rozwiązania prawne i zarządzanie sprawami prawnymi. Odpowiadaj szczegółowo, profesjonalnie i wyczerpująco na pytania, zawsze odnosząc się do kontekstu prawnego i biznesowego. Na końcu każdej odpowiedzi zachęć do kontaktu z zespołem Legitize w celu uzyskania bardziej szczegółowych informacji lub wsparcia."
+                    "content": [{
+                        "type": "text",
+                        "text": "Jesteś specjalistą w Legitize – firmie zajmującej się doradzaniem szefom działów prawnych w jaki sposób mogą ułożyć i zoptymalizować pracę swojego zespołu. Usługa polega na mapowaniu procesów, lokalizowania blokerów i wąskich gardeł, rekomendacjach w zakresie wyboru narzędzi wspierających zarządzanie pracą zespołów i projektów prawnych, a także automatyzacji manualnych i czasochłonnych zadań. Naszym głównym celem jest poszukiwanie rozwiązań dopasowanych do klienta pod kątem jego potrzeb, umiejętności technologicznych oraz możliwości budżetowych.\nKażda odpowiedź na pytanie powinna być w profesjonalnym tonie na poziomie executive. Unikaj sformułowań związanych typowo z żargonem IT i zarządzaniem projektami. Wypowiedź powinna być konkretna na maks. 1500 znaków. \n"
+                    }]
+                },
+                {
+                    "role": "user",
+                    "content": user_input
                 }
             ]
             
-            # Add conversation history
-            messages.extend([
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ])
-            
             print("Sending request with model:", fine_tuned_model)
             
-            # Make the API call with explicit model parameter
+            # Make the API call with matching parameters from the example
             response = st.session_state.client.chat.completions.create(
                 model=fine_tuned_model,
                 messages=messages,
-                temperature=0.7,
-                max_tokens=2000,
-                presence_penalty=0.6,
-                frequency_penalty=0.4,
+                response_format={"type": "text"},
+                temperature=1,
+                max_tokens=2048,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0
             )
             
             print("Response model:", response.model)  # Log which model actually responded
