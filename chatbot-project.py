@@ -12,10 +12,16 @@ COLORS = {
     'lighter_blue': '#004488'
 }
 
-# Initialize OpenAI client
-client = OpenAI(
-    api_key="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"
-)
+# Initialize OpenAI client with secret
+if 'client' not in st.session_state:
+    try:
+        st.session_state.client = OpenAI(
+            api_key=st.secrets["OPENAI_API_KEY"]
+        )
+    except Exception as e:
+        st.error("Error initializing OpenAI client. Please check your API key in Streamlit secrets.")
+        st.stop()
+
 fine_tuned_model = "ft:gpt-4o-2024-08-06:personal:version-1:AXSDqRcx"
 
 # Page styling
@@ -84,7 +90,7 @@ if user_input := st.chat_input("Wpisz swoje pytanie tutaj..."):
 
         try:
             # Call OpenAI's chat completion endpoint with new API syntax
-            response = client.chat.completions.create(
+            response = st.session_state.client.chat.completions.create(
                 model=fine_tuned_model,
                 messages=[
                     {"role": m["role"], "content": m["content"]}
