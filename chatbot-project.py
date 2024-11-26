@@ -31,16 +31,12 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS with wrapper approach
+# Custom CSS with fixed dark blue input area
 st.markdown("""
     <style>
         /* Main app background */
         .stApp {
-            background: linear-gradient(to bottom, 
-                """ + COLORS['light_gray'] + """ 0%, 
-                """ + COLORS['light_gray'] + """ calc(100% - 200px), 
-                """ + COLORS['dark_blue'] + """ calc(100% - 200px), 
-                """ + COLORS['dark_blue'] + """ 100%);
+            background-color: """ + COLORS['light_gray'] + """;
         }
         
         /* Header styling */
@@ -73,16 +69,23 @@ st.markdown("""
             background-color: white !important;
             border: 2px solid """ + COLORS['yellow'] + """;
         }
-        
-        /* Chat input area */
-        .stChatInputContainer {
-            background-color: transparent !important;
+
+        /* Create dark blue background container for input */
+        div[data-testid="stChatInput"] {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            padding: 2rem !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            z-index: 999 !important;
         }
         
+        /* Style the input box */
         textarea {
             border: 1px solid """ + COLORS['blue'] + """ !important;
             color: white !important;
-            background-color: rgba(0, 0, 0, 0.2) !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
         
         textarea::placeholder {
@@ -92,7 +95,7 @@ st.markdown("""
         
         /* Content spacing */
         .block-container {
-            padding-bottom: 100px;
+            padding-bottom: 120px !important;
         }
         
         /* Header container */
@@ -102,23 +105,21 @@ st.markdown("""
             margin: -100px -100px 20px -100px;
         }
         
-        /* Element visibility */
-        iframe {
-            display: none;
-        }
-        
-        /* Ensure chat messages don't get cut off */
+        /* Chat flow spacing */
         .stChatFlow {
             margin-bottom: 100px;
             padding-bottom: 50px;
         }
         
-        /* Style bottom area */
-        div[data-testid="stChatInput"] {
-            background-color: transparent !important;
+        /* Remove white backgrounds from chat input container */
+        div[data-testid="stChatInput"] > *, 
+        div[data-testid="stChatInput"] div {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
     </style>
 """, unsafe_allow_html=True)
+
+# Rest of your code remains the same...
 
 # Initialize session states
 if "messages" not in st.session_state:
