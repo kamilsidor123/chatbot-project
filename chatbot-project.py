@@ -2,11 +2,73 @@ import os
 from openai import OpenAI
 import streamlit as st
 
-# [Previous code remains the same until the CSS section]
+# Custom color scheme
+COLORS = {
+    'light_gray': '#F4F4F4',
+    'yellow': '#FFD447',
+    'black': '#000000',
+    'dark_blue': '#003366',
+    'blue': '#0055AA',
+    'lighter_blue': '#004488'
+}
 
+# Initialize OpenAI client with secret
+if 'client' not in st.session_state:
+    try:
+        st.session_state.client = OpenAI(
+            api_key=st.secrets["OPENAI_API_KEY"]
+        )
+    except Exception as e:
+        st.error("Error initializing OpenAI client. Please check your API key in Streamlit secrets.")
+        st.stop()
+
+fine_tuned_model = "ft:gpt-4o-2024-08-06:personal:version-1:AXSDqRcx"
+
+# Page styling
+st.set_page_config(
+    page_title="Asystent Legitize",
+    page_icon="💬",
+    layout="wide"
+)
+
+# Updated CSS with higher input box and complete circuit
 st.markdown("""
     <style>
-        /* [Previous CSS rules remain the same until the bottom container section] */
+        /* Main app background */
+        .stApp {
+            background-color: """ + COLORS['light_gray'] + """;
+        }
+        
+        /* Header styling */
+        header[data-testid="stHeader"] {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+        
+        /* Text styling */
+        .title-text, .subtitle-text {
+            color: """ + COLORS['black'] + """ !important;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Chat messages */
+        .stChatMessage {
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .stChatMessage div, .stChatMessage p, .stChatMessage span {
+            color: """ + COLORS['black'] + """ !important;
+        }
+        
+        .stChatMessage[data-testid="user-message"] {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+        
+        .stChatMessage[data-testid="assistant-message"] {
+            background-color: white !important;
+            border: 2px solid """ + COLORS['yellow'] + """;
+        }
 
         /* Bottom container with full coverage */
         .stChatInputContainer, div[data-testid="stChatInput"] {
@@ -25,7 +87,7 @@ st.markdown("""
         /* Input container positioning */
         div[data-testid="stChatInput"] > div {
             position: relative !important;
-            top: 60px !important;  /* Moved higher */
+            top: 60px !important;
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
@@ -50,6 +112,7 @@ st.markdown("""
             border: 1px solid """ + COLORS['blue'] + """ !important;
             border-radius: 4px !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
+            overflow: hidden !important;
         }
         
         textarea {
@@ -63,6 +126,7 @@ st.markdown("""
             max-height: 45px !important;
             resize: none !important;
             flex-grow: 1 !important;
+            font-size: 14px !important;
         }
         
         textarea::placeholder {
@@ -77,13 +141,54 @@ st.markdown("""
             border-left: 1px solid """ + COLORS['blue'] + """ !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
             padding: 0 16px !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
         
-        /* [Rest of the CSS remains the same] */
+        /* Content spacing */
+        .block-container {
+            padding-bottom: 200px !important;
+        }
+        
+        /* Header container */
+        .custom-header {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            padding: 20px;
+            margin: -100px -100px 20px -100px;
+        }
+        
+        /* Chat flow spacing */
+        .stChatFlow {
+            margin-bottom: 200px !important;
+            padding-bottom: 50px;
+            max-width: 800px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        
+        /* Remove any rounded corners and ensure dark blue background */
+        div[data-testid="stChatInput"] > *, 
+        div[data-testid="stChatInput"] div,
+        .stChatInputContainer > *,
+        .stChatInputContainer div {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+
+        /* Ensure full width coverage */
+        .main > div {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+        }
+
+        /* Remove any default border radius */
+        .stChatFloatingInputContainer {
+            border-radius: 0 !important;
+        }
     </style>
 """, unsafe_allow_html=True)
-
-# [Rest of the code remains the same]
 
 # Initialize session states
 if "messages" not in st.session_state:
