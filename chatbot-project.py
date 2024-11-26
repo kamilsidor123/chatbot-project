@@ -22,7 +22,7 @@ if 'client' not in st.session_state:
         st.error("Error initializing OpenAI client. Please check your API key in Streamlit secrets.")
         st.stop()
 
-fine_tuned_model = "ft:gpt-40-2024-08-06:personal:version-1:AXSDq3gR:ckpt-step-80"
+fine_tuned_model = "ft:gpt-40-2024-08-06:personal:version-1:AXSDqRcx"
 
 # Page styling
 st.set_page_config(
