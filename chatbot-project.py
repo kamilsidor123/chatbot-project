@@ -31,124 +31,91 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for branding with fixed bottom styling
+# Custom CSS with wrapper approach
 st.markdown("""
     <style>
-        /* General app styling */
-        .stApp { 
-            background-color: """ + COLORS['light_gray'] + """; 
+        /* Main app background */
+        .stApp {
+            background: linear-gradient(to bottom, 
+                """ + COLORS['light_gray'] + """ 0%, 
+                """ + COLORS['light_gray'] + """ calc(100% - 200px), 
+                """ + COLORS['dark_blue'] + """ calc(100% - 200px), 
+                """ + COLORS['dark_blue'] + """ 100%);
         }
         
         /* Header styling */
-        header[data-testid="stHeader"] { 
-            background-color: """ + COLORS['dark_blue'] + """ !important; 
+        header[data-testid="stHeader"] {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
         
         /* Text styling */
-        .title-text, .subtitle-text { 
-            color: """ + COLORS['black'] + """ !important; 
-            margin: 0; 
-            padding: 0; 
+        .title-text, .subtitle-text {
+            color: """ + COLORS['black'] + """ !important;
+            margin: 0;
+            padding: 0;
         }
         
-        /* Chat message styling */
-        .stChatMessage { 
-            border-radius: 10px; 
-            margin-bottom: 1rem; 
+        /* Chat messages */
+        .stChatMessage {
+            border-radius: 10px;
+            margin-bottom: 1rem;
         }
-        .stChatMessage div, .stChatMessage p, .stChatMessage span { 
-            color: """ + COLORS['black'] + """ !important; 
+        
+        .stChatMessage div, .stChatMessage p, .stChatMessage span {
+            color: """ + COLORS['black'] + """ !important;
         }
-        .stChatMessage[data-testid="user-message"] { 
-            background-color: """ + COLORS['dark_blue'] + """ !important; 
+        
+        .stChatMessage[data-testid="user-message"] {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
-        .stChatMessage[data-testid="assistant-message"] { 
-            background-color: white !important; 
-            border: 2px solid """ + COLORS['yellow'] + """; 
+        
+        .stChatMessage[data-testid="assistant-message"] {
+            background-color: white !important;
+            border: 2px solid """ + COLORS['yellow'] + """;
         }
-
-        /* Fixed bottom bar styling */
+        
+        /* Chat input area */
         .stChatInputContainer {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-            border-top: 2px solid """ + COLORS['blue'] + """ !important;
-            padding: 1rem !important;
-            position: fixed !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            z-index: 999999 !important;
+            background-color: transparent !important;
         }
-
-        /* Style the parent of chat input */
-        .stChatInputContainer > div {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-        }
-
-        /* Style the chat input itself */
-        .stChatInput {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-        }
-
-        /* Style all children of chat input */
-        .stChatInputContainer *, 
-        .stChatInput *,
-        section[data-testid="stChatInput"] * {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-        }
-
-        /* Input field styling */
+        
         textarea {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
             border: 1px solid """ + COLORS['blue'] + """ !important;
             color: white !important;
-            caret-color: white !important;
+            background-color: rgba(0, 0, 0, 0.2) !important;
         }
         
-        textarea::placeholder { 
-            color: rgba(255, 255, 255, 0.7) !important; 
+        textarea::placeholder {
+            color: white !important;
+            opacity: 0.7;
         }
-
-        /* Ensure content doesn't get hidden behind fixed chat input */
-        .block-container { 
-            padding-bottom: 100px !important; 
+        
+        /* Content spacing */
+        .block-container {
+            padding-bottom: 100px;
         }
         
         /* Header container */
-        .custom-header { 
-            background-color: """ + COLORS['dark_blue'] + """ !important; 
-            padding: 20px; 
-            margin: -100px -100px 20px -100px; 
+        .custom-header {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            padding: 20px;
+            margin: -100px -100px 20px -100px;
         }
         
-        /* Chat flow spacing */
-        .stChatFlow { 
-            margin-bottom: 100px !important; 
-            padding-bottom: 100px !important;
+        /* Element visibility */
+        iframe {
+            display: none;
         }
-
-        /* Style the submit button container */
-        .stChatInput button {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-            border-color: """ + COLORS['blue'] + """ !important;
+        
+        /* Ensure chat messages don't get cut off */
+        .stChatFlow {
+            margin-bottom: 100px;
+            padding-bottom: 50px;
         }
-
-        /* Force dark background for the entire bottom section */
-        [data-testid="stChatInput"], 
-        [data-testid="stChatInput"] > div,
-        [data-testid="stChatInput"] section {
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-        }
-
-        /* Add a dark overlay to the bottom of the page */
-        .main .block-container::after {
-            content: "";
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 150px;
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-            z-index: 999998;
+        
+        /* Style bottom area */
+        div[data-testid="stChatInput"] {
+            background-color: transparent !important;
         }
     </style>
 """, unsafe_allow_html=True)
