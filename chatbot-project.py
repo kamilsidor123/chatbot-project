@@ -18,10 +18,14 @@ if 'client' not in st.session_state:
         st.session_state.client = OpenAI(
             api_key=st.secrets["OPENAI_API_KEY"]
         )
+        print("OpenAI client initialized successfully")  # Added logging
     except Exception as e:
+        error_message = f"Error initializing OpenAI client: {str(e)}"
+        print(error_message)  # Added logging
         st.error("Error initializing OpenAI client. Please check your API key in Streamlit secrets.")
         st.stop()
 
+# Use exact fine-tuned model ID
 fine_tuned_model = "ft:gpt-4o-2024-08-06:personal:version-1:AXSDqRcx"
 
 # Page styling
@@ -237,24 +241,31 @@ if user_input := st.chat_input("Wpisz swoje pytanie tutaj..."):
     # Generate assistant response
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
-        full_response = ""
-
         try:
+            # Log the attempt to use the fine-tuned model
+            print(f"Attempting to use fine-tuned model: {fine_tuned_model}")
+            print(f"User input: {user_input}")
+            
             # Call OpenAI's chat completion endpoint with new API syntax
             response = st.session_state.client.chat.completions.create(
                 model=fine_tuned_model,
                 messages=[
                     {"role": m["role"], "content": m["content"]}
                     for m in st.session_state.messages
-                ]
+                ],
+                temperature=0.7,  # You can adjust this value
             )
-
-            # Extract assistant's reply using new API response structure
+            
+            # Extract and display response
             full_response = response.choices[0].message.content
+            print(f"Response received: {full_response[:100]}...")  # Log first 100 chars of response
+            
             message_placeholder.markdown(full_response)
-
-            # Add assistant's response to session state
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
         except Exception as e:
-            st.error(f"An error occurred: {e}")
+            error_message = f"An error occurred: {str(e)}"
+            print(error_message)  # Log the error
+            st.error(error_message)
+            # Optionally, log additional debugging information
+            print("Current session state messages:", st.session_state.messages)
