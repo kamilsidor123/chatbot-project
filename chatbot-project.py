@@ -31,52 +31,89 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for branding
+# Custom CSS for branding with fixed bottom styling
 st.markdown("""
     <style>
-        .stApp { background-color: """ + COLORS['light_gray'] + """; }
-        header[data-testid="stHeader"] { background-color: """ + COLORS['dark_blue'] + """ !important; }
-        .title-text, .subtitle-text { color: """ + COLORS['black'] + """ !important; margin: 0; padding: 0; }
-        .stChatMessage { border-radius: 10px; margin-bottom: 1rem; }
-        .stChatMessage div, .stChatMessage p, .stChatMessage span { color: """ + COLORS['black'] + """ !important; }
-        .stChatMessage[data-testid="user-message"] { background-color: """ + COLORS['dark_blue'] + """ !important; }
-        .stChatMessage[data-testid="assistant-message"] { background-color: white !important; border: 2px solid """ + COLORS['yellow'] + """; }
+        /* General app styling */
+        .stApp { 
+            background-color: """ + COLORS['light_gray'] + """; 
+        }
         
-        /* Chat input container styling */
-        .stChatInputContainer, 
-        .stChatInputContainer section, 
-        .stChatInputContainer div {
+        /* Header styling */
+        header[data-testid="stHeader"] { 
+            background-color: """ + COLORS['dark_blue'] + """ !important; 
+        }
+        
+        /* Text styling */
+        .title-text, .subtitle-text { 
+            color: """ + COLORS['black'] + """ !important; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        /* Chat message styling */
+        .stChatMessage { 
+            border-radius: 10px; 
+            margin-bottom: 1rem; 
+        }
+        .stChatMessage div, .stChatMessage p, .stChatMessage span { 
+            color: """ + COLORS['black'] + """ !important; 
+        }
+        .stChatMessage[data-testid="user-message"] { 
+            background-color: """ + COLORS['dark_blue'] + """ !important; 
+        }
+        .stChatMessage[data-testid="assistant-message"] { 
+            background-color: white !important; 
+            border: 2px solid """ + COLORS['yellow'] + """; 
+        }
+
+        /* Fixed bottom bar styling */
+        .stChatInputContainer {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            border-top: 2px solid """ + COLORS['blue'] + """ !important;
+            padding: 1rem !important;
             position: fixed !important;
             bottom: 0 !important;
             left: 0 !important;
             right: 0 !important;
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-            padding: 20px 60px !important;
-            z-index: 999 !important;
-            border: none !important;
+            z-index: 999999 !important;
         }
-        
-        /* Force dark theme for input area */
-        textarea, 
-        .stTextInput input, 
-        .stTextInput textarea {
+
+        /* Style the parent of chat input */
+        .stChatInputContainer > div {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+
+        /* Style the chat input itself */
+        .stChatInput {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+
+        /* Style all children of chat input */
+        .stChatInputContainer *, 
+        .stChatInput *,
+        section[data-testid="stChatInput"] * {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+
+        /* Input field styling */
+        textarea {
             background-color: """ + COLORS['dark_blue'] + """ !important;
             border: 1px solid """ + COLORS['blue'] + """ !important;
             color: white !important;
             caret-color: white !important;
         }
         
-        /* Ensure placeholder text is visible */
         textarea::placeholder { 
             color: rgba(255, 255, 255, 0.7) !important; 
         }
-        
-        /* Additional spacing for content */
+
+        /* Ensure content doesn't get hidden behind fixed chat input */
         .block-container { 
-            padding-bottom: 400px !important; 
+            padding-bottom: 100px !important; 
         }
         
-        /* Header styling */
+        /* Header container */
         .custom-header { 
             background-color: """ + COLORS['dark_blue'] + """ !important; 
             padding: 20px; 
@@ -85,12 +122,33 @@ st.markdown("""
         
         /* Chat flow spacing */
         .stChatFlow { 
-            margin-bottom: 150px !important; 
+            margin-bottom: 100px !important; 
+            padding-bottom: 100px !important;
         }
-        
-        /* Force dark theme for bottom bar */
-        [data-testid="stChatInput"] > div {
+
+        /* Style the submit button container */
+        .stChatInput button {
             background-color: """ + COLORS['dark_blue'] + """ !important;
+            border-color: """ + COLORS['blue'] + """ !important;
+        }
+
+        /* Force dark background for the entire bottom section */
+        [data-testid="stChatInput"], 
+        [data-testid="stChatInput"] > div,
+        [data-testid="stChatInput"] section {
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+        }
+
+        /* Add a dark overlay to the bottom of the page */
+        .main .block-container::after {
+            content: "";
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            z-index: 999998;
         }
     </style>
 """, unsafe_allow_html=True)
