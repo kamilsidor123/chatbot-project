@@ -2,13 +2,12 @@ import os
 from openai import OpenAI
 import streamlit as st
 
-# Custom color scheme with darker blue for bottom
+# Custom color scheme - using same dark blue for both top and bottom
 COLORS = {
     'light_gray': '#F4F4F4',
     'yellow': '#FFD447',
     'black': '#000000',
-    'dark_blue': '#003366',
-    'darker_blue': '#002347',  # Darker shade for bottom part
+    'dark_blue': '#003366',  # Using this for both top and bottom
     'blue': '#0055AA',
     'lighter_blue': '#004488'
 }
@@ -32,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS with centered, darker input area
+# Updated CSS with fixes for bottom bar
 st.markdown("""
     <style>
         /* Main app background */
@@ -71,37 +70,35 @@ st.markdown("""
             border: 2px solid """ + COLORS['yellow'] + """;
         }
 
-        /* Create darker blue background container for input */
+        /* Create blue background container for input that extends full width */
         div[data-testid="stChatInput"] {
             position: fixed !important;
-            bottom: 0 !important;
+            bottom: 40px !important;  /* Moved up from bottom */
             left: 0 !important;
-            right: 0 !important;
-            padding: 2rem !important;
-            background-color: """ + COLORS['darker_blue'] + """ !important;
+            width: 100vw !important;  /* Full viewport width */
+            padding: 2rem 0 !important;  /* Removed horizontal padding */
+            background-color: """ + COLORS['dark_blue'] + """ !important;
             z-index: 999 !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            margin: 0 !important;
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1) !important;
         }
         
-        /* Center and style the input container */
+        /* Center the input box */
         div[data-testid="stChatInput"] > div {
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            background-color: """ + COLORS['darker_blue'] + """ !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            padding: 0 20px !important;  /* Add padding to the input container */
         }
         
         /* Style the input box */
         textarea {
             border: 1px solid """ + COLORS['blue'] + """ !important;
             color: white !important;
-            background-color: """ + COLORS['darker_blue'] + """ !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
             border-radius: 8px !important;
             padding: 12px !important;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
         
         textarea::placeholder {
@@ -111,7 +108,7 @@ st.markdown("""
         
         /* Content spacing */
         .block-container {
-            padding-bottom: 120px !important;
+            padding-bottom: 160px !important;  /* Increased to account for raised bottom bar */
         }
         
         /* Header container */
@@ -123,7 +120,7 @@ st.markdown("""
         
         /* Chat flow spacing */
         .stChatFlow {
-            margin-bottom: 100px;
+            margin-bottom: 120px !important;  /* Adjusted margin */
             padding-bottom: 50px;
             max-width: 800px !important;
             margin-left: auto !important;
@@ -133,17 +130,14 @@ st.markdown("""
         /* Remove white backgrounds from chat input container */
         div[data-testid="stChatInput"] > *, 
         div[data-testid="stChatInput"] div {
-            background-color: """ + COLORS['darker_blue'] + """ !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
 
-        /* Additional styling for better aesthetics */
-        button[kind="primary"] {
-            background-color: """ + COLORS['blue'] + """ !important;
-            border-color: """ + COLORS['blue'] + """ !important;
-        }
-
-        .stChatFloatingInputContainer {
-            padding: 0 20px !important;
+        /* Ensure full width coverage */
+        .main > div {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 !important;
         }
     </style>
 """, unsafe_allow_html=True)
