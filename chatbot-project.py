@@ -2,12 +2,12 @@ import os
 from openai import OpenAI
 import streamlit as st
 
-# Custom color scheme - using same dark blue for both top and bottom
+# Custom color scheme
 COLORS = {
     'light_gray': '#F4F4F4',
     'yellow': '#FFD447',
     'black': '#000000',
-    'dark_blue': '#003366',  # Using this for both top and bottom
+    'dark_blue': '#003366',
     'blue': '#0055AA',
     'lighter_blue': '#004488'
 }
@@ -31,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with fixes for bottom bar
+# Updated CSS with higher position and removed rounded corners
 st.markdown("""
     <style>
         /* Main app background */
@@ -70,26 +70,29 @@ st.markdown("""
             border: 2px solid """ + COLORS['yellow'] + """;
         }
 
-        /* Create blue background container for input that extends full width */
-        div[data-testid="stChatInput"] {
+        /* Bottom container with full coverage */
+        .stChatInputContainer, div[data-testid="stChatInput"] {
             position: fixed !important;
-            bottom: 40px !important;  /* Moved up from bottom */
+            bottom: 0 !important;
             left: 0 !important;
-            width: 100vw !important;  /* Full viewport width */
-            padding: 2rem 0 !important;  /* Removed horizontal padding */
+            width: 100vw !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
             z-index: 999 !important;
             margin: 0 !important;
-            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1) !important;
+            padding: 0 !important;
+            border-radius: 0 !important;  /* Remove rounded corners */
+            height: 140px !important;  /* Fixed height for bottom area */
         }
-        
-        /* Center the input box */
+
+        /* Input container positioning */
         div[data-testid="stChatInput"] > div {
+            position: relative !important;
+            top: 20px !important;  /* Move input box higher within the container */
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-            padding: 0 20px !important;  /* Add padding to the input container */
+            background-color: transparent !important;
+            padding: 0 20px !important;
         }
         
         /* Style the input box */
@@ -97,8 +100,8 @@ st.markdown("""
             border: 1px solid """ + COLORS['blue'] + """ !important;
             color: white !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
-            border-radius: 8px !important;
             padding: 12px !important;
+            border-radius: 0 !important;  /* Remove rounded corners */
         }
         
         textarea::placeholder {
@@ -108,7 +111,7 @@ st.markdown("""
         
         /* Content spacing */
         .block-container {
-            padding-bottom: 160px !important;  /* Increased to account for raised bottom bar */
+            padding-bottom: 160px !important;
         }
         
         /* Header container */
@@ -120,17 +123,20 @@ st.markdown("""
         
         /* Chat flow spacing */
         .stChatFlow {
-            margin-bottom: 120px !important;  /* Adjusted margin */
+            margin-bottom: 160px !important;
             padding-bottom: 50px;
             max-width: 800px !important;
             margin-left: auto !important;
             margin-right: auto !important;
         }
         
-        /* Remove white backgrounds from chat input container */
+        /* Remove any rounded corners and ensure dark blue background */
         div[data-testid="stChatInput"] > *, 
-        div[data-testid="stChatInput"] div {
+        div[data-testid="stChatInput"] div,
+        .stChatInputContainer > *,
+        .stChatInputContainer div {
             background-color: """ + COLORS['dark_blue'] + """ !important;
+            border-radius: 0 !important;
         }
 
         /* Ensure full width coverage */
@@ -139,10 +145,18 @@ st.markdown("""
             max-width: 100% !important;
             padding: 0 !important;
         }
+
+        /* Remove any default border radius */
+        .stChatFloatingInputContainer {
+            border-radius: 0 !important;
+        }
+
+        /* Style any buttons to match */
+        button {
+            border-radius: 0 !important;
+        }
     </style>
 """, unsafe_allow_html=True)
-
-# Rest of your code remains the same...
 
 # Initialize session states
 if "messages" not in st.session_state:
