@@ -31,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with higher input box and complete circuit
+# Updated CSS with higher input box and single border
 st.markdown("""
     <style>
         /* Main app background */
@@ -87,7 +87,7 @@ st.markdown("""
         /* Input container positioning */
         div[data-testid="stChatInput"] > div {
             position: relative !important;
-            top: 60px !important;
+            top: 80px !important;
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
@@ -101,18 +101,17 @@ st.markdown("""
         .stChatInput {
             display: flex !important;
             align-items: center !important;
-            position: relative !important;
             width: 100% !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 4px !important;
+            overflow: hidden !important;
         }
         
-        /* Create a wrapper for the input and button */
+        /* Remove any default styles that might interfere */
         .stChatInput > div {
-            display: flex !important;
-            width: 100% !important;
-            border: 1px solid """ + COLORS['blue'] + """ !important;
-            border-radius: 4px !important;
-            background-color: """ + COLORS['dark_blue'] + """ !important;
-            overflow: hidden !important;
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
         }
         
         textarea {
@@ -127,6 +126,7 @@ st.markdown("""
             resize: none !important;
             flex-grow: 1 !important;
             font-size: 14px !important;
+            box-shadow: none !important;
         }
         
         textarea::placeholder {
@@ -134,17 +134,15 @@ st.markdown("""
             opacity: 0.7;
         }
         
-        /* Style the send button to be part of the input box */
+        /* Style the send button */
         button[kind="primary"] {
             height: 45px !important;
             border: none !important;
-            border-left: 1px solid """ + COLORS['blue'] + """ !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
             padding: 0 16px !important;
             margin: 0 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
+            box-shadow: none !important;
         }
         
         /* Content spacing */
