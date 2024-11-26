@@ -31,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with higher input position
+# Updated CSS with final adjustments
 st.markdown("""
     <style>
         /* Main app background */
@@ -87,7 +87,7 @@ st.markdown("""
         /* Input container positioning */
         div[data-testid="stChatInput"] > div {
             position: relative !important;
-            top: 20px !important;  /* Moved higher up */
+            top: 10px !important;
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
@@ -104,7 +104,8 @@ st.markdown("""
             width: 100% !important;
             border: 1px solid rgba(255, 255, 255, 0.2) !important;
             border-radius: 4px !important;
-            overflow: hidden !important;
+            overflow: visible !important;
+            position: relative !important;
         }
         
         /* Remove any default styles that might interfere */
@@ -134,7 +135,7 @@ st.markdown("""
             opacity: 0.7;
         }
         
-        /* Style the send button */
+        /* Style the send button with complete circuit */
         button[kind="primary"] {
             height: 45px !important;
             border: none !important;
@@ -143,6 +144,8 @@ st.markdown("""
             padding: 0 16px !important;
             margin: 0 !important;
             box-shadow: none !important;
+            position: relative !important;
+            right: -1px !important;
         }
         
         /* Content spacing */
