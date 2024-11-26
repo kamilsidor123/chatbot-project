@@ -31,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with higher position and removed rounded corners
+# Updated CSS with symmetrical input box
 st.markdown("""
     <style>
         /* Main app background */
@@ -80,28 +80,41 @@ st.markdown("""
             z-index: 999 !important;
             margin: 0 !important;
             padding: 0 !important;
-            border-radius: 0 !important;  /* Remove rounded corners */
-            height: 140px !important;  /* Fixed height for bottom area */
+            border-radius: 0 !important;
+            height: 180px !important;
         }
 
         /* Input container positioning */
         div[data-testid="stChatInput"] > div {
             position: relative !important;
-            top: 20px !important;  /* Move input box higher within the container */
+            top: 40px !important;
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
             background-color: transparent !important;
             padding: 0 20px !important;
+            display: flex !important;
+            align-items: center !important;
         }
         
-        /* Style the input box */
+        /* Style the input box and its container */
+        .stChatInput {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
+        
         textarea {
             border: 1px solid """ + COLORS['blue'] + """ !important;
             color: white !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
-            padding: 12px !important;
-            border-radius: 0 !important;  /* Remove rounded corners */
+            padding: 12px 16px !important;
+            border-radius: 4px !important;
+            margin: 0 !important;
+            height: 45px !important;
+            min-height: 45px !important;
+            max-height: 45px !important;
+            resize: none !important;
         }
         
         textarea::placeholder {
@@ -109,9 +122,19 @@ st.markdown("""
             opacity: 0.7;
         }
         
+        /* Style the send button to match input height */
+        button[kind="primary"] {
+            height: 45px !important;
+            margin-left: -2px !important;
+            border-radius: 4px !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
+            border: 1px solid """ + COLORS['blue'] + """ !important;
+            padding: 0 16px !important;
+        }
+        
         /* Content spacing */
         .block-container {
-            padding-bottom: 160px !important;
+            padding-bottom: 200px !important;
         }
         
         /* Header container */
@@ -123,7 +146,7 @@ st.markdown("""
         
         /* Chat flow spacing */
         .stChatFlow {
-            margin-bottom: 160px !important;
+            margin-bottom: 200px !important;
             padding-bottom: 50px;
             max-width: 800px !important;
             margin-left: auto !important;
@@ -136,7 +159,6 @@ st.markdown("""
         .stChatInputContainer > *,
         .stChatInputContainer div {
             background-color: """ + COLORS['dark_blue'] + """ !important;
-            border-radius: 0 !important;
         }
 
         /* Ensure full width coverage */
@@ -148,11 +170,6 @@ st.markdown("""
 
         /* Remove any default border radius */
         .stChatFloatingInputContainer {
-            border-radius: 0 !important;
-        }
-
-        /* Style any buttons to match */
-        button {
             border-radius: 0 !important;
         }
     </style>
