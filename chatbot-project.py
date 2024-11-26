@@ -43,7 +43,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with fixed circuit border
+# Updated CSS with enhanced styling
 st.markdown("""
     <style>
         /* Main app background */
@@ -100,7 +100,7 @@ st.markdown("""
         div[data-testid="stChatInput"] > div {
             position: relative !important;
             top: 10px !important;
-            max-width: 800px !important;
+            max-width: 700px !important;
             width: 100% !important;
             margin: 0 auto !important;
             background-color: transparent !important;
@@ -109,14 +109,14 @@ st.markdown("""
             align-items: center !important;
         }
         
-        /* Style the input box and its container with complete circuit */
+        /* Style the input box with complete right border */
         .stChatInput {
             display: flex !important;
             align-items: center !important;
             width: 100% !important;
             border: 1px solid rgba(255, 255, 255, 0.2) !important;
             border-radius: 4px !important;
-            overflow: visible !important;
+            overflow: hidden !important;
             position: relative !important;
             padding: 0 !important;
             margin: 0 !important;
@@ -151,7 +151,7 @@ st.markdown("""
             opacity: 0.7;
         }
         
-        /* Style the send button as part of the circuit */
+        /* Style the send button with complete borders */
         button[kind="primary"] {
             height: 45px !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
@@ -160,6 +160,7 @@ st.markdown("""
             box-shadow: none !important;
             border: none !important;
             border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
             position: relative !important;
             border-radius: 0 3px 3px 0 !important;
         }
@@ -167,6 +168,7 @@ st.markdown("""
         /* Remove default button hover effects */
         button[kind="primary"]:hover {
             border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
         }
         
@@ -180,15 +182,25 @@ st.markdown("""
             background-color: """ + COLORS['dark_blue'] + """ !important;
             padding: 20px;
             margin: -100px -100px 20px -100px;
+            max-width: 100vw !important;
+        }
+
+        .custom-header > div {
+            max-width: 700px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding: 0 20px !important;
         }
         
         /* Chat flow spacing */
         .stChatFlow {
             margin-bottom: 200px !important;
             padding-bottom: 50px;
-            max-width: 800px !important;
+            max-width: 700px !important;
             margin-left: auto !important;
             margin-right: auto !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
         }
         
         /* Remove any rounded corners and ensure dark blue background */
@@ -267,20 +279,19 @@ if user_input := st.chat_input("Wpisz swoje pytanie tutaj..."):
                     for m in st.session_state.messages
                 ],
                 temperature=0.7,
-                max_tokens=2000,  # Increase max tokens for longer responses
-                presence_penalty=0.6,  # Encourage more diverse responses
-                frequency_penalty=0.4,  # Reduce repetition
+                max_tokens=2000,
+                presence_penalty=0.6,
+                frequency_penalty=0.4,
             )
             
             full_response = response.choices[0].message.content
-            print(f"Response received: {full_response[:100]}...")  # Log first 100 chars
+            print(f"Response received: {full_response[:100]}...")
             
             message_placeholder.markdown(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
         except Exception as e:
             error_message = f"An error occurred: {str(e)}"
-            print(error_message)  # Log the error
+            print(error_message)
             st.error(error_message)
-            # Optionally, log additional debugging information
             print("Current session state messages:", st.session_state.messages)
