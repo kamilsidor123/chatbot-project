@@ -12,16 +12,24 @@ COLORS = {
     'lighter_blue': '#004488'
 }
 
-# Initialize OpenAI client with secret
+# Initialize OpenAI client with secret and debug model list
 if 'client' not in st.session_state:
     try:
         st.session_state.client = OpenAI(
             api_key=st.secrets["OPENAI_API_KEY"]
         )
-        print("OpenAI client initialized successfully")  # Added logging
+        print("OpenAI client initialized successfully")
+        
+        # Debug: List available models
+        try:
+            models = st.session_state.client.models.list()
+            print("Available models:", [model.id for model in models])
+        except Exception as e:
+            print(f"Error listing models: {e}")
+            
     except Exception as e:
         error_message = f"Error initializing OpenAI client: {str(e)}"
-        print(error_message)  # Added logging
+        print(error_message)
         st.error("Error initializing OpenAI client. Please check your API key in Streamlit secrets.")
         st.stop()
 
@@ -242,23 +250,30 @@ if user_input := st.chat_input("Wpisz swoje pytanie tutaj..."):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         try:
-            # Log the attempt to use the fine-tuned model
             print(f"Attempting to use fine-tuned model: {fine_tuned_model}")
             print(f"User input: {user_input}")
             
-            # Call OpenAI's chat completion endpoint with new API syntax
+            # Enhanced API call with more specific parameters
             response = st.session_state.client.chat.completions.create(
                 model=fine_tuned_model,
                 messages=[
+                    # Add a system message to set the context and expected behavior
+                    {
+                        "role": "system",
+                        "content": "Jesteś asystentem Legitize - firmy oferującej nowoczesne rozwiązania prawne i zarządzanie sprawami prawnymi. Odpowiadaj szczegółowo, profesjonalnie i wyczerpująco na pytania, zawsze odnosząc się do kontekstu prawnego i biznesowego. Na końcu każdej odpowiedzi zachęć do kontaktu z zespołem Legitize w celu uzyskania bardziej szczegółowych informacji lub wsparcia."
+                    }
+                ] + [
                     {"role": m["role"], "content": m["content"]}
                     for m in st.session_state.messages
                 ],
-                temperature=0.7,  # You can adjust this value
+                temperature=0.7,
+                max_tokens=2000,  # Increase max tokens for longer responses
+                presence_penalty=0.6,  # Encourage more diverse responses
+                frequency_penalty=0.4,  # Reduce repetition
             )
             
-            # Extract and display response
             full_response = response.choices[0].message.content
-            print(f"Response received: {full_response[:100]}...")  # Log first 100 chars of response
+            print(f"Response received: {full_response[:100]}...")  # Log first 100 chars
             
             message_placeholder.markdown(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
