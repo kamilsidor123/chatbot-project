@@ -31,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with final adjustments
+# Updated CSS with fixed circuit border
 st.markdown("""
     <style>
         /* Main app background */
@@ -97,7 +97,7 @@ st.markdown("""
             align-items: center !important;
         }
         
-        /* Style the input box and its container */
+        /* Style the input box and its container with complete circuit */
         .stChatInput {
             display: flex !important;
             align-items: center !important;
@@ -106,10 +106,14 @@ st.markdown("""
             border-radius: 4px !important;
             overflow: visible !important;
             position: relative !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
         
-        /* Remove any default styles that might interfere */
         .stChatInput > div {
+            display: flex !important;
+            width: 100% !important;
             border: none !important;
             background: none !important;
             box-shadow: none !important;
@@ -135,17 +139,23 @@ st.markdown("""
             opacity: 0.7;
         }
         
-        /* Style the send button with complete circuit */
+        /* Style the send button as part of the circuit */
         button[kind="primary"] {
             height: 45px !important;
-            border: none !important;
-            border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
             background-color: """ + COLORS['dark_blue'] + """ !important;
             padding: 0 16px !important;
             margin: 0 !important;
             box-shadow: none !important;
+            border: none !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
             position: relative !important;
-            right: -1px !important;
+            border-radius: 0 3px 3px 0 !important;
+        }
+
+        /* Remove default button hover effects */
+        button[kind="primary"]:hover {
+            border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background-color: """ + COLORS['dark_blue'] + """ !important;
         }
         
         /* Content spacing */
