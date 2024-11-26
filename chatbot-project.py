@@ -31,7 +31,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Updated CSS with higher input box and single border
+# Updated CSS with higher input position
 st.markdown("""
     <style>
         /* Main app background */
@@ -87,7 +87,7 @@ st.markdown("""
         /* Input container positioning */
         div[data-testid="stChatInput"] > div {
             position: relative !important;
-            top: 80px !important;
+            top: 20px !important;  /* Moved higher up */
             max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
